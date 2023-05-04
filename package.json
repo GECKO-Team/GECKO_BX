@@ -1,0 +1,24 @@
+{
+  "name": "gecko_bx",
+  "version": "1.0.0",
+  "description": "Backend API",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GECKO-Team/GECKO_BX.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GECKO-Team/GECKO_BX/issues"
+  },
+  "homepage": "https://github.com/GECKO-Team/GECKO_BX#readme",
+  "dependencies": {
+    "@hapi/hapi": "^21.3.2"
+  }
+}
