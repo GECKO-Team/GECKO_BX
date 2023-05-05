@@ -1,6 +1,4 @@
 import Hapi from "@hapi/hapi";
-
-
 import { apiRoutes } from "./api-routes.js";
 
 

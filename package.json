@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/GECKO-Team/GECKO_BX#readme",
   "dependencies": {
-    "@hapi/hapi": "^21.3.2"
+    "@hapi/hapi": "^21.3.2",
+    "dotenv": "^16.0.3",
+    "pg": "^8.10.0"
   }
 }
