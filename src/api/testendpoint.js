@@ -11,16 +11,6 @@ export  const testEndpoint = {
         notes: "Returns a simple String",
     },
 
-    testdb : {
-        // returns all users to assure the api is working
-        handler: async function (request, h) {
-            let query = "SELECT * FROM USERS";
-            const data = await getData(query);
-            console.log(data);
-            return data;
-        }
-    }
-
 }
 
 export default testEndpoint;

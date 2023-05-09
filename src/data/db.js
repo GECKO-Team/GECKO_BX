@@ -11,7 +11,7 @@ const dbConfig = {
 const dbClient = new pg.Client(dbConfig);
 await dbClient.connect();
 
-async function submitData(query) {
+async function submitData_just_query(query) {
     try {
         await dbClient.query(query);
         return true;
@@ -21,7 +21,28 @@ async function submitData(query) {
     }
 }
 
-async function getData(my_query) {
+async function submitData(query, values) {
+    try {
+        const res = await dbClient.query(query, values);
+        return res.rows[0];
+    } catch (dbError) {
+        console.error(dbError);
+        return false;
+    }
+}
+
+async function getData(my_query, values) {
+    try {
+        const result = await dbClient.query(my_query, values);
+        return result;
+    } catch (dbError) {
+        console.error(dbError);
+        return null;
+    }
+}
+
+
+async function getData_old(my_query) {
     try {
         const result = await dbClient.query(my_query);
         return result;
@@ -31,4 +52,4 @@ async function getData(my_query) {
     }
 }
 
-export { getData, submitData };
+export { getData, submitData};

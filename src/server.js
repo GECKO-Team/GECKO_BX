@@ -1,5 +1,8 @@
 import Hapi from "@hapi/hapi";
 import { apiRoutes } from "./api-routes.js";
+import HapiSwagger from "hapi-swagger";
+import Inert from "@hapi/inert";
+import Vision from "@hapi/vision";
 
 
 const swaggerOptions = {
@@ -23,6 +26,15 @@ async function init() {
             version: "0.1"
         },
     };
+
+    await server.register([
+        Inert,
+        Vision,
+        {
+            plugin: HapiSwagger,
+            options: swaggerOptions,
+        },
+    ]);
 
 
 

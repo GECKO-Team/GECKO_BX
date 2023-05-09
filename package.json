@@ -19,8 +19,20 @@
   },
   "homepage": "https://github.com/GECKO-Team/GECKO_BX#readme",
   "dependencies": {
+    "@hapi/boom": "^10.0.1",
     "@hapi/hapi": "^21.3.2",
+    "@hapi/inert": "^7.1.0",
+    "@hapi/vision": "^7.0.1",
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
+    "hapi-swagger": "^16.0.1",
+    "joi": "^17.9.2",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22",
     "pg": "^8.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7"
   }
 }
