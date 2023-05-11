@@ -6,9 +6,14 @@ import {html} from "mocha/lib/reporters/index.js";
 
 export const apiRoutes = [
 
-
-    {method: "POST", path: "/api/addUser", config: userApi.createUser},
+    // WELCOME PAGE
     {method: "GET", path: "/", config: html_servant.welcome},
+    // CAUTION: "/documentation" is reserved by hapi-swagger
+
+
+    // API ENDPOINTS
+    {method: "POST", path: "/api/addUser", config: userApi.createUser},
+    {method: "POST", path: "/api/authenticate", config: userApi.authenticate},
 
     // more to follow
 

@@ -5,6 +5,7 @@ import {User_service} from "../data/user_service.js";
 import {CreateUserSchema, getUserSchema} from "../data/joi-schemas.js";
 import {log, validationError} from "./logger.js";
 import Joi from "joi";
+import {createToken} from "./jwt_utils.js";
 
 const saltRounds = 10;
 
@@ -23,6 +24,7 @@ export  const userApi = {
     },
 
     createUser : {
+        auth: false,
         handler: async function (request, h) {
             /*
             INPUT SHOULD LOOK LIKE - validation not implemented yet // TODO
@@ -55,7 +57,39 @@ export  const userApi = {
             failAction: validationError
         }
 
-    }
+    },
+    authenticate: {
+        auth: false,
+        handler: async function (request, h) {
+            try {
+                const user = await User_service.getUser_by_Email(request.payload.email);
+                if (user === null) {
+                    return Boom.unauthorized("User not found");
+                }
+
+                // compare the password
+
+                if (await User_service.checkPassword(request.payload.email, request.payload.password) === false) {
+                    return Boom.unauthorized("Invalid password");
+                }
+
+                const token = createToken(user);
+
+                return h.response({ success: true, token: token, username: user.username }).code(201);
+
+            } catch (err) {
+                // eslint-disable-next-line no-template-curly-in-string
+                console.log(`DEBUG: authenticate API - ${  err}`)
+                return Boom.serverUnavailable("Database Error");
+            }
+        },
+        tags: ["api"],
+        description: "Authenticate  a User",
+        notes: "If user has valid email/password, create and return a JWT token",
+        // validate: { payload: UserCredentialsSpec, failAction: validationError },
+        // response: { schema: JwtAuth, failAction: validationError },
+
+    },
 
 }
 

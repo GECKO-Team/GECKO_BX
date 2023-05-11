@@ -19,6 +19,19 @@ export const User_service = {
         return created_user;
     },
 
+    async checkPassword(email, password) {
+        // get user pw
+        let query = "SELECT password FROM USERS WHERE email = $1";
+        const user = await getData(query, [email]);
+        if (user.rowCount > 0) {
+            const hash = user.rows[0].password;
+            return bcrypt.compare(password, hash);
+        }
+        else {
+            return false;
+        }
+    },
+
     async checkUsername_exists(username) {
         // this function checks if a user with the given username exists in the database
         // returns true if user exists, false if not
@@ -28,8 +41,43 @@ export const User_service = {
 
     },
 
-    async checkEmail(email) {
+    async userCredentials(username) {
+        // this function returns the user credentials for the given username
+        // returns null if user does not exist
+        let query = "SELECT * FROM USERS WHERE username = $1";
+        const user = await getData(query, [username]);
+        if (user.rowCount > 0) {
+            return user.rows[0];
+        } else {
+            return null;
+        }
+    },
 
+    async getUser_by_Email(email) {
+        // this function returns the user credentials for the given username
+        // returns null if user does not exist
+        let query = "SELECT * FROM USERS WHERE email = $1";
+        const user = await getData(query, [email]);
+        if (user.rowCount > 0) {
+            return user.rows[0];
+        } else {
+            return null;
+        }
+    },
+
+    async getUser_by_Username(username) {
+        // this function returns the user credentials for the given username
+        // returns null if user does not exist
+        let query = "SELECT * FROM USERS WHERE username = $1";
+        const user = await getData(query, [username]);
+        if (user.rowCount > 0) {
+            return user.rows[0];
+        } else {
+            return null;
+        }
+    },
+
+    async checkEmail(email) {
 
     }
 

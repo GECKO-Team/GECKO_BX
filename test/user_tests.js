@@ -5,10 +5,17 @@ import {userService} from './api-services.js';
 
 suite('User tests', function() {
 
+
     test('Test user creation', async function() {
         // adds user and checks if the response is equal to the user, that should have been added
         const response = await userService.createUser(test_user);
         assert.equal(response.username, test_user.username);
+    })
+
+    test('User authentication', async function() {
+        const response = await userService.authenticate(test_user);
+        assert.equal(response.success, true);
+
     })
 
 

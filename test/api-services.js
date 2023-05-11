@@ -7,8 +7,14 @@ export const userService = {
 
     async createUser(user) {
         const res = await axios.post(`${this.Url}/api/addUser`, user);
+        console.log(res)
         return res.data;
     },
+
+    async authenticate(user) {
+        const res = await axios.post(`${this.Url}/api/authenticate`, user);
+        return res.data;
+    }
 
 
 
