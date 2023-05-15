@@ -14,6 +14,8 @@ export const apiRoutes = [
     // API ENDPOINTS
     {method: "POST", path: "/api/addUser", config: userApi.createUser},
     {method: "POST", path: "/api/authenticate", config: userApi.authenticate},
+    {method: "POST", path: "/api/checkUsername_exists", config: userApi.checkUsername_exists},
+
 
     // more to follow
 

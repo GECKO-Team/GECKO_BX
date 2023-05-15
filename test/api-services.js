@@ -14,6 +14,11 @@ export const userService = {
     async authenticate(user) {
         const res = await axios.post(`${this.Url}/api/authenticate`, user);
         return res.data;
+    },
+
+    async checkUsername_exists(user) {
+        const res = await axios.post(`${this.Url}/api/checkUsername_exists`, user);
+        return res.data;
     }
 
 

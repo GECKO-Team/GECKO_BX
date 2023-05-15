@@ -18,3 +18,7 @@ export const loginSchema = Joi.object({
     password: Joi.string().required()
 });
 
+export const checkUsernameSchema = Joi.object({
+    username: Joi.string().required()
+});
+

@@ -2,7 +2,7 @@
 import Boom from "@hapi/boom";
 import {getData, submitData} from '../data/db.js';
 import {User_service} from "../data/user_service.js";
-import {CreateUserSchema, getUserSchema} from "../data/joi-schemas.js";
+import {CreateUserSchema, getUserSchema, checkUsernameSchema} from "../data/joi-schemas.js";
 import {log, validationError} from "./logger.js";
 import Joi from "joi";
 import {createToken} from "./jwt_utils.js";
@@ -58,6 +58,24 @@ export  const userApi = {
         }
 
     },
+
+    checkUsername_exists : {
+        auth: false,
+        handler: async function (request, h){
+            if (await User_service.checkUsername_exists(request.payload.username)) {
+                throw Boom.badRequest("Username already exists");
+            }
+            return h.response({sucess:true}).code(200);
+        },
+        tags: ["api"],
+        description: "Check if username already exists",
+        notes: "Returns true if the name exists, otherwise false",
+        validate: {
+            payload: checkUsernameSchema ,
+            failAction: validationError
+        }
+    },
+
     authenticate: {
         auth: false,
         handler: async function (request, h) {

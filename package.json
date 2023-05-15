@@ -28,6 +28,7 @@
     "dotenv": "^16.0.3",
     "hapi-swagger": "^16.0.1",
     "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "pg": "^8.10.0"
