@@ -6,3 +6,9 @@ export const test_user = {
     email: "testus123er@supertester1.io",
     password: "test"
 }
+
+export const no_user = {
+    username: "not_a_user",
+    email: "not_a_user@supertester1.io",
+    password: "no"
+}
