@@ -1,6 +1,6 @@
 {
    "version": 2,
-   "name": "music-album",
+   "name": "GECKO Backend",
    "builds": [
       { "src": "src/server.js", "use": "@vercel/node" }
    ],
