@@ -1,4 +1,4 @@
-
+import {getData} from '../data/db.js';
 
 export  const testEndpoint = {
     apitest : {
