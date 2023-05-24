@@ -22,3 +22,13 @@ export const checkUsernameSchema = Joi.object({
     username: Joi.string().required()
 });
 
+export const createEventSchema = Joi.object({
+    group_id: Joi.number().required(),
+    title: Joi.string().required(),
+    time: Joi.date().required(),
+    country: Joi.string().required(),
+    city: Joi.string().required(),
+    street: Joi.string().required(),
+    house_nr: Joi.string().required(),
+    description: Joi.string()
+});
