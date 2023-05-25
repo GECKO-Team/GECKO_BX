@@ -1,6 +1,7 @@
 
 import test from "./api/testendpoint.js";
 import {userApi} from "./api/user_api.js";
+import {groupAPI} from "./api/group_api.js";
 import {eventApi} from "./api/event_api.js";
 import {html_servant} from "./api/HTML_servant.js";
 import {html} from "mocha/lib/reporters/index.js";
@@ -17,6 +18,7 @@ export const apiRoutes = [
     {method: "POST", path: "/api/authenticate", config: userApi.authenticate},
     {method: "POST", path: "/api/checkUsername_exists", config: userApi.checkUsername_exists},
     {method: "GET", path: "/api/users/{username}", config: userApi.getUser},
+    {method: "POST", path: "/api/createGroup", config: groupAPI.createGroup},
 
     // Events
     {method: "POST", path: "/api/events", config: eventApi.createEvent},

@@ -32,3 +32,14 @@ export const createEventSchema = Joi.object({
     house_nr: Joi.string().required(),
     description: Joi.string()
 });
+export const CreateGroupSchema = Joi.object({
+    username: Joi.string().required(),
+    name: Joi.string().required(),
+    description: Joi.string().required()
+});
+
+export const GetGroupSchema = Joi.object({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+    id: Joi.number().required()
+});

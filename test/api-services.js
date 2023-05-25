@@ -21,6 +21,11 @@ export const userService = {
         return res.data;
     },
 
+    async createGroup(group) {
+        const res = await axios.post(`${this.Url}/api/createGroup`, group);
+        return res.data;
+    },
+
     async getUser(user) {
     const res = await axios.get(`${this.Url}/api/user/{username}`, user);  //TODO: Not sure if it works 
     console.log(res)
