@@ -109,4 +109,36 @@ export  const userApi = {
 
     },
 
+    getUser : {
+        auth: false,
+        handler: async function (request, h) {
+
+            // TODO: INPUT SHOULD LOOK LIKE - validation not implemented yet
+            /*{
+                "username": "test"
+            }
+
+             */
+            const username = request.params.username;
+            log("Searching for the user by username: " + username);
+
+            // check if username exists
+            if (await User_service.checkUsername_exists(username) == null) {
+                throw Boom.badRequest("User with this username '" + username + "' was not found");
+            }
+
+            const user = await User_service.getUser_by_Username(username);
+            log(user)
+            return h.response(user).code(200);
+
+        },
+        tags: ["api"],
+        description: "Get a user by username",
+        notes: "Returns a user details",
+        response: {
+            schema: getUserSchema,
+            failAction: validationError
+        }
+
+    },
 }

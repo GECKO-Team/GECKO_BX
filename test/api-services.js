@@ -19,8 +19,12 @@ export const userService = {
     async checkUsername_exists(user) {
         const res = await axios.post(`${this.Url}/api/checkUsername_exists`, user);
         return res.data;
-    }
+    },
 
-
+    async getUser(user) {
+    const res = await axios.get(`${this.Url}/api/user/{username}`, user);  //TODO: Not sure if it works 
+    console.log(res)
+    return res.data;
+},
 
 };
