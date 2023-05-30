@@ -63,9 +63,10 @@ export  const userApi = {
         auth: false,
         handler: async function (request, h){
             if (await User_service.checkUsername_exists(request.payload.username)) {
-                throw Boom.badRequest("Username already exists");
+                //Boom.badRequest("Username already exists"); -> boom not testable with chai?
+                return h.response({success: false , error: "Username already exists"}).code(400);
             }
-            return h.response({sucess:true}).code(200);
+            return h.response({success: true}).code(200);
         },
         tags: ["api"],
         description: "Check if username already exists",

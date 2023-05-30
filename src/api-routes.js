@@ -18,6 +18,8 @@ export const apiRoutes = [
     {method: "POST", path: "/api/authenticate", config: userApi.authenticate},
     {method: "POST", path: "/api/checkUsername_exists", config: userApi.checkUsername_exists},
     {method: "GET", path: "/api/users/{username}", config: userApi.getUser},
+
+    // Groups
     {method: "POST", path: "/api/createGroup", config: groupAPI.createGroup},
 
     // Events
