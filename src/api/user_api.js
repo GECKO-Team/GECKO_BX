@@ -81,6 +81,7 @@ export  const userApi = {
         auth: false,
         handler: async function (request, h) {
             try {
+                console.log(request.payload)
                 const user = await User_service.getUser_by_Email(request.payload.email);
                 if (user === null) {
                     return Boom.unauthorized("User not found");
@@ -146,15 +147,16 @@ export  const userApi = {
     deleteUser : {
         auth: false,
         handler: async function (request, h) {
+            console.log(request.params.username)
             log("Trying to delete user from database: " + request.params.username);
             const username = request.params.username;
             // check if username exists
-            if (await User_service.checkUsername_exists(username) == null) {
+            if (await User_service.checkUsername_exists(username) == false) {
                 throw Boom.badRequest("User with this username '" + username + "' was not found");
             }
-
             const user = await User_service.deleteUserbyUsername(username);
-            return h.response(user).code(200);
+            let responsemessage = "User with username '" + username + "' was deleted";
+            return h.response(responsemessage).code(200);
 
         },
         tags: ["api"],

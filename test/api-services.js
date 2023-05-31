@@ -33,7 +33,15 @@ export const userService = {
     },
 
     async deleteUser(user) {
-        const res = await axios.delete(`${this.Url}/api/users`,  { params: { username: user.username }});
+        try {
+            const res = await axios.delete(`${this.Url}/api/users/${user.username}`);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response.data;
+        }
+
     }
 
 };
