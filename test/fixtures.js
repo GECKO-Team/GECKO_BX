@@ -2,8 +2,8 @@
 export const serviceUrl = "http://localhost:3000";
 
 export const test_user = {
-    username: "123test1",
-    email: "testus123er@supertester1.io",
+    username: "DEL_tester",
+    email: "test@st.oth-regensbugr.de",
     password: "test"
 }
 

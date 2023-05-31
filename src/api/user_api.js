@@ -142,4 +142,24 @@ export  const userApi = {
         }
 
     },
+
+    deleteUser : {
+        auth: false,
+        handler: async function (request, h) {
+            log("Trying to delete user from database: " + request.params.username);
+            const username = request.params.username;
+            // check if username exists
+            if (await User_service.checkUsername_exists(username) == null) {
+                throw Boom.badRequest("User with this username '" + username + "' was not found");
+            }
+
+            const user = await User_service.deleteUserbyUsername(username);
+            return h.response(user).code(200);
+
+        },
+        tags: ["api"],
+        description: "Delete a user by username",
+        notes: "Returns a user details",
+    },
+
 }

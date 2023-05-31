@@ -7,10 +7,10 @@ import {userService} from './api-services.js';
 
 suite('User tests', function() {
 
-
     test('Test user creation', async function() {
         // adds user and checks if the response is equal to the user, that should have been added
         const response = await userService.createUser(test_user);
+        assert.equal(response.statusCode, 200);
         assert.equal(response.username, test_user.username);
     })
 
@@ -26,6 +26,11 @@ suite('User tests', function() {
         // somehow not working, dunno why -> but works in api
         //const response2 = await userService.checkUsername_exists(check_test_user);
         //assert.equal(response2.success, false);
+    })
+
+    test('Delete a user', async function(){
+        const response = await userService.deleteUser(test_user.username);
+        assert.equal(response.success, true);
     })
 
 

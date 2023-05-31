@@ -6,9 +6,14 @@ export const userService = {
 
 
     async createUser(user) {
-        const res = await axios.post(`${this.Url}/api/addUser`, user);
-        console.log(res)
-        return res.data;
+        try {
+            const res = await axios.post(`${this.Url}/api/addUser`, user);
+            return res.data;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response.data;
+        }
     },
 
     async authenticate(user) {
@@ -26,6 +31,10 @@ export const userService = {
     console.log(res)
     return res.data;
     },
+
+    async deleteUser(user) {
+        const res = await axios.delete(`${this.Url}/api/users`,  { params: { username: user.username }});
+    }
 
 };
 
