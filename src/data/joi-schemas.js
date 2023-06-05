@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+// User
 export const CreateUserSchema = Joi.object({
     username: Joi.string().required(),
     email: Joi.string().email().required(),
@@ -22,6 +23,16 @@ export const checkUsernameSchema = Joi.object({
     username: Joi.string().required()
 });
 
+export const userInformationSchema = Joi.object({
+    username: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    id: Joi.number().required(),
+    photo: Joi.optional(),
+    interest: Joi.optional(),
+});
+
+// Event
 export const createEventSchema = Joi.object({
     group_id: Joi.number().required(),
     title: Joi.string().required(),
@@ -32,6 +43,8 @@ export const createEventSchema = Joi.object({
     house_nr: Joi.string().required(),
     description: Joi.string()
 });
+
+// Group
 export const CreateGroupSchema = Joi.object({
     username: Joi.string().required(),
     name: Joi.string().required(),

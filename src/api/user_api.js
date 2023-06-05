@@ -2,7 +2,7 @@
 import Boom from "@hapi/boom";
 import {getData, submitData} from '../data/db.js';
 import {User_service} from "../data/user_service.js";
-import {CreateUserSchema, getUserSchema, checkUsernameSchema} from "../data/joi-schemas.js";
+import {CreateUserSchema, getUserSchema, checkUsernameSchema, userInformationSchema} from "../data/joi-schemas.js";
 import {log, validationError} from "./logger.js";
 import Joi from "joi";
 import {createToken} from "./jwt_utils.js";
@@ -60,6 +60,7 @@ export  const userApi = {
     },
 
     checkUsername_exists : {
+        // returns false, when username exists, true when it does not
         auth: false,
         handler: async function (request, h){
             if (await User_service.checkUsername_exists(request.payload.username)) {
@@ -115,30 +116,29 @@ export  const userApi = {
         auth: false,
         handler: async function (request, h) {
 
-            // TODO: INPUT SHOULD LOOK LIKE - validation not implemented yet
-            /*{
-                "username": "test"
-            }
-
-             */
             const username = request.params.username;
             log("Searching for the user by username: " + username);
 
             // check if username exists
-            if (await User_service.checkUsername_exists(username) == null) {
+            if (await User_service.checkUsername_exists(username) == false) {
                 throw Boom.badRequest("User with this username '" + username + "' was not found");
             }
-
+            // get user data
             const user = await User_service.getUser_by_Username(username);
-            log(user)
-            return h.response(user).code(200);
+
+            // get interests for user
+            const interests = await User_service.getUserInterests(user.id);
+            console.dir(interests);
+            console.dir(user);
+
+            return h.response({username: user.username, password: user.password, email: user.email, id: user.id, photo: user.photo, interest: interests}).code(200);
 
         },
         tags: ["api"],
         description: "Get a user by username",
         notes: "Returns a user details",
         response: {
-            schema: getUserSchema,
+            schema: userInformationSchema,
             failAction: validationError
         }
 

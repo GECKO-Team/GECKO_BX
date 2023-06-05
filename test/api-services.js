@@ -27,9 +27,14 @@ export const userService = {
     },
 
     async getUser(user) {
-    const res = await axios.get(`${this.Url}/api/user/{username}`, user);  //TODO: Not sure if it works 
-    console.log(res)
-    return res.data;
+        try{
+            const res = await axios.get(`${this.Url}/api/users/${user.username}`);
+            return res.data;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response.data;
+        }
     },
 
     async deleteUser(user) {

@@ -28,11 +28,20 @@ suite('User tests', function() {
 
     test('Check if username exists', async function(){
         const response = await userService.checkUsername_exists(check_no_user);
-        console.log(response)
-        assert.equal(response.success, true)
-        // somehow not working, dunno why -> but works in api
-        //const response2 = await userService.checkUsername_exists(check_test_user);
-        //assert.equal(response2.success, false);
+        console.log(response);
+        assert.equal(response.success, true);
+    })
+
+    test('Get userdata of a existing user', async function(){
+        const response = await userService.getUser(test_user);
+        console.log(response);
+        assert.equal(response.username, test_user.username);
+    })
+
+    test('Get userdata of a not existing user', async function(){
+        const response = await userService.getUser(check_no_user);
+        console.log(response);
+        assert.equal(response.statusCode, 400);
     })
 
     test('Delete a user', async function(){
@@ -45,4 +54,5 @@ suite('User tests', function() {
         const response = await userService.deleteUser(check_no_user);
         assert.equal(response.statusCode, 400);
     })
+
 });
