@@ -63,10 +63,9 @@ export  const userApi = {
         auth: false,
         handler: async function (request, h){
             if (await User_service.checkUsername_exists(request.payload.username)) {
-                //Boom.badRequest("Username already exists"); -> boom not testable with chai?
-                return h.response({success: false , error: "Username already exists"}).code(400);
+                throw Boom.badRequest("Username already exists");
             }
-            return h.response({success: true}).code(200);
+            return h.response({sucess:true}).code(200);
         },
         tags: ["api"],
         description: "Check if username already exists",
@@ -81,7 +80,6 @@ export  const userApi = {
         auth: false,
         handler: async function (request, h) {
             try {
-                console.log(request.payload)
                 const user = await User_service.getUser_by_Email(request.payload.email);
                 if (user === null) {
                     return Boom.unauthorized("User not found");
@@ -111,57 +109,5 @@ export  const userApi = {
 
     },
 
-    getUser : {
-        auth: false,
-        handler: async function (request, h) {
-
-            // TODO: INPUT SHOULD LOOK LIKE - validation not implemented yet
-            /*{
-                "username": "test"
-            }
-
-             */
-            const username = request.params.username;
-            log("Searching for the user by username: " + username);
-
-            // check if username exists
-            if (await User_service.checkUsername_exists(username) == null) {
-                throw Boom.badRequest("User with this username '" + username + "' was not found");
-            }
-
-            const user = await User_service.getUser_by_Username(username);
-            log(user)
-            return h.response(user).code(200);
-
-        },
-        tags: ["api"],
-        description: "Get a user by username",
-        notes: "Returns a user details",
-        response: {
-            schema: getUserSchema,
-            failAction: validationError
-        }
-
-    },
-
-    deleteUser : {
-        auth: false,
-        handler: async function (request, h) {
-            console.log(request.params.username)
-            log("Trying to delete user from database: " + request.params.username);
-            const username = request.params.username;
-            // check if username exists
-            if (await User_service.checkUsername_exists(username) == false) {
-                throw Boom.badRequest("User with this username '" + username + "' was not found");
-            }
-            const user = await User_service.deleteUserbyUsername(username);
-            let responsemessage = "User with username '" + username + "' was deleted";
-            return h.response(responsemessage).code(200);
-
-        },
-        tags: ["api"],
-        description: "Delete a user by username",
-        notes: "Returns a user details",
-    },
-
 }
+j

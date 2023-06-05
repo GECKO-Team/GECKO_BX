@@ -2,17 +2,15 @@
 export const serviceUrl = "http://localhost:3000";
 
 export const test_user = {
-    username: "DEL_tester",
-    email: "test@st.oth-regensbugr.de",
+    username: "123test",
+    email: "testus123er@supertester1.io",
     password: "test"
 }
 
-export const check_test_user = {
-    username: "123test1",
-}
-
-export const check_no_user = {
+export const no_user = {
     username: "not_a_user",
+    email: "not_a_user@supertester1.io",
+    password: "no"
 }
 
 export const test_event = {
@@ -35,11 +33,4 @@ export const not_exist_event = {
     street: "Street",
     house_nr: "ABC",
     description: "ABDDDF"
-}
-
-export const test_group = {
-    username : "123test1",
-    name : "1testgroup",
-    description: "test"
-
 }

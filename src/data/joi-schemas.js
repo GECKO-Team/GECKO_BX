@@ -14,7 +14,7 @@ export const getUserSchema = Joi.object({
 });
 
 export const loginSchema = Joi.object({
-    email: Joi.string().required(),
+    username: Joi.string().required(),
     password: Joi.string().required()
 });
 
@@ -31,15 +31,4 @@ export const createEventSchema = Joi.object({
     street: Joi.string().required(),
     house_nr: Joi.string().required(),
     description: Joi.string()
-});
-export const CreateGroupSchema = Joi.object({
-    username: Joi.string().required(),
-    name: Joi.string().required(),
-    description: Joi.string().required()
-});
-
-export const GetGroupSchema = Joi.object({
-    name: Joi.string().required(),
-    description: Joi.string().required(),
-    id: Joi.number().required()
 });
