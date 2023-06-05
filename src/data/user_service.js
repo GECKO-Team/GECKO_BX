@@ -11,6 +11,11 @@ export const User_service = {
 
         const hash = await bcrypt.hash(user.password, saltRounds);
 
+        // check if user exists
+        if (await this.checkUsername_exists(user.username)) {
+            return {statusCode: 400, message: "Username already exists"};
+        }
+
         let query = "INSERT INTO USERS (username, email, password) VALUES ($1, $2, $3) RETURNING *";
         const created_user = await submitData(query, [user.username, user.email, hash]);
 
@@ -79,6 +84,12 @@ export const User_service = {
 
     async checkEmail(email) {
 
+    },
+
+    deleteUserbyUsername(username) {
+        // this function deletes a user from the database
+        let query = "DELETE FROM USERS WHERE username = $1";
+        return submitData(query, [username]);
     }
 
 

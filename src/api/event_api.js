@@ -134,9 +134,6 @@ export const eventApi = {
             else if (request.query.country && request.query.city && request.query.street && request.query.housenr) {
                 data = await event_service.getEvent_at_place(country, city, street, house_nr);
             }
-            else{
-                data = await event_service.getEvent_all();
-            }
 
             if (data.rows && data.rowCount > 0) {
                 return h.response(data.rows).code(200);

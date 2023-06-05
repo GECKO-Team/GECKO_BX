@@ -42,12 +42,6 @@ export const event_service = {
         return event;
     },
 
-    async getEvent_all() {
-        let query = "SELECT * FROM events";
-        const event = await getData(query);
-        return event;
-    },
-
     async updateEvent(id, event) {
         let query = "UPDATE events SET group_id = $1, title = $2, time = $3, country = $4, city = $5, street = $6, house_nr = $7, description = $8 WHERE id = $9 RETURNING *";
         const result = submitData(query, [event.group_id, event.title, event.time, event.country, event.city, event.street, event.house_nr, event.description, id]);
