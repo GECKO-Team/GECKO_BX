@@ -11,6 +11,11 @@ export const User_service = {
 
         const hash = await bcrypt.hash(user.password, saltRounds);
 
+        // check if user exists
+        if (await this.checkUsername_exists(user.username)) {
+            return {statusCode: 400, message: "Username already exists"};
+        }
+
         let query = "INSERT INTO USERS (username, email, password) VALUES ($1, $2, $3) RETURNING *";
         const created_user = await submitData(query, [user.username, user.email, hash]);
 
@@ -54,7 +59,7 @@ export const User_service = {
     },
 
     async getUser_by_Email(email) {
-        // this function returns the user credentials for the given username
+        // this function returns tuser data for the given email
         // returns null if user does not exist
         let query = "SELECT * FROM USERS WHERE email = $1";
         const user = await getData(query, [email]);
@@ -66,7 +71,7 @@ export const User_service = {
     },
 
     async getUser_by_Username(username) {
-        // this function returns the user credentials for the given username
+        // this function returns user data for the given username
         // returns null if user does not exist
         let query = "SELECT * FROM USERS WHERE username = $1";
         const user = await getData(query, [username]);
@@ -77,8 +82,26 @@ export const User_service = {
         }
     },
 
+    async getUserInterests(user_id){
+        // this function returns all interests for the given username
+        // returns null if user does not exist
+        let query = "SELECT interest FROM INTERESTS WHERE user_id = $1";
+        const interests = await getData(query, [user_id]);
+        if (interests.rowCount > 0) {
+            return interests.rows.map(row => row.interest);
+        } else {
+            return null;
+        }
+    },
+
     async checkEmail(email) {
 
+    },
+
+    deleteUserbyUsername(username) {
+        // this function deletes a user from the database
+        let query = "DELETE FROM USERS WHERE username = $1";
+        return submitData(query, [username]);
     }
 
 

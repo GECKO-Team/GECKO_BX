@@ -2,7 +2,7 @@
 import Boom from "@hapi/boom";
 import {getData, submitData} from '../data/db.js';
 import {User_service} from "../data/user_service.js";
-import {CreateUserSchema, getUserSchema, checkUsernameSchema} from "../data/joi-schemas.js";
+import {CreateUserSchema, getUserSchema, checkUsernameSchema, userInformationSchema} from "../data/joi-schemas.js";
 import {log, validationError} from "./logger.js";
 import Joi from "joi";
 import {createToken} from "./jwt_utils.js";
@@ -60,12 +60,14 @@ export  const userApi = {
     },
 
     checkUsername_exists : {
+        // returns false, when username exists, true when it does not
         auth: false,
         handler: async function (request, h){
             if (await User_service.checkUsername_exists(request.payload.username)) {
-                throw Boom.badRequest("Username already exists");
+                //Boom.badRequest("Username already exists"); -> boom not testable with chai?
+                return h.response({success: false , error: "Username already exists"}).code(400);
             }
-            return h.response({sucess:true}).code(200);
+            return h.response({success: true}).code(200);
         },
         tags: ["api"],
         description: "Check if username already exists",
@@ -80,6 +82,7 @@ export  const userApi = {
         auth: false,
         handler: async function (request, h) {
             try {
+                console.log(request.payload)
                 const user = await User_service.getUser_by_Email(request.payload.email);
                 if (user === null) {
                     return Boom.unauthorized("User not found");
@@ -109,5 +112,56 @@ export  const userApi = {
 
     },
 
-}
+    getUser : {
+        auth: false,
+        handler: async function (request, h) {
 
+            const username = request.params.username;
+            log("Searching for the user by username: " + username);
+
+            // check if username exists
+            if (await User_service.checkUsername_exists(username) == false) {
+                throw Boom.badRequest("User with this username '" + username + "' was not found");
+            }
+            // get user data
+            const user = await User_service.getUser_by_Username(username);
+
+            // get interests for user
+            const interests = await User_service.getUserInterests(user.id);
+            console.dir(interests);
+            console.dir(user);
+
+            return h.response({username: user.username, password: user.password, email: user.email, id: user.id, photo: user.photo, interest: interests}).code(200);
+
+        },
+        tags: ["api"],
+        description: "Get a user by username",
+        notes: "Returns a user details",
+        response: {
+            schema: userInformationSchema,
+            failAction: validationError
+        }
+
+    },
+
+    deleteUser : {
+        auth: false,
+        handler: async function (request, h) {
+            console.log(request.params.username)
+            log("Trying to delete user from database: " + request.params.username);
+            const username = request.params.username;
+            // check if username exists
+            if (await User_service.checkUsername_exists(username) == false) {
+                throw Boom.badRequest("User with this username '" + username + "' was not found");
+            }
+            const user = await User_service.deleteUserbyUsername(username);
+            let responsemessage = "User with username '" + username + "' was deleted";
+            return h.response(responsemessage).code(200);
+
+        },
+        tags: ["api"],
+        description: "Delete a user by username",
+        notes: "Returns a user details",
+    },
+
+}
