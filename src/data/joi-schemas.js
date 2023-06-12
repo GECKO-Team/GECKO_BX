@@ -41,7 +41,8 @@ export const createEventSchema = Joi.object({
     city: Joi.string().required(),
     street: Joi.string().required(),
     house_nr: Joi.string().required(),
-    description: Joi.string()
+    description: Joi.string(),
+    creator: Joi.string().required()
 });
 
 // Group

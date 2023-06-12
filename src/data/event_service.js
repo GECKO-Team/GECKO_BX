@@ -6,8 +6,8 @@ export const event_service = {
 
     async createEvent(event) {
 
-        let query = "INSERT INTO events (group_id, title, time, country, city, street, house_nr, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *";
-        const created_event = await submitData(query, [event.group_id, event.title, event.time, event.country, event.city, event.street, event.house_nr, event.description]);
+        let query = "INSERT INTO events (group_id, title, time, country, city, street, house_nr, description, creator) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *";
+        const created_event = await submitData(query, [event.group_id, event.title, event.time, event.country, event.city, event.street, event.house_nr, event.description, event.creator]);
 
         return created_event;
     },
