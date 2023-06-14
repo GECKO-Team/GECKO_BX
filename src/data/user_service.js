@@ -1,5 +1,5 @@
 
-import {getData, submitData} from '../data/db.js';
+import { getData, submitData } from '../data/db.js';
 import bcrypt from 'bcrypt';
 import format from 'pg-format';
 
@@ -15,7 +15,7 @@ export const User_service = {
 
         // check if user exists
         if (await this.checkUsername_exists(user.username)) {
-            return {statusCode: 400, message: "Username already exists"};
+            return { statusCode: 400, message: "Username already exists" };
         }
 
         let query = "INSERT INTO USERS (username, email, password) VALUES ($1, $2, $3) RETURNING *";
@@ -84,7 +84,19 @@ export const User_service = {
         }
     },
 
-    async getUserInterests(user_id){
+    async getUser_by_Id(id) {
+        // this function returns the event for the given id
+        // returns null if event does not exist
+        let query = "SELECT * FROM users WHERE id = $1";
+        const event = await getData(query, [id]);
+        if (event.rowCount > 0) {
+            return event.rows[0];
+        } else {
+            return null;
+        }
+    },
+
+    async getUserInterests(user_id) {
         // this function returns all interests for the given username
         // returns null if user does not exist
         let query = "SELECT interest FROM INTERESTS WHERE user_id = $1";
@@ -116,13 +128,17 @@ export const User_service = {
     async updateInterest(id, interests) {
 
         let queryDelete = "DELETE FROM interests WHERE user_id = $1";
-        const resultDelete = submitData(query, [id]);
+        const resultDelete = submitData(queryDelete, [id]);
 
+        if (interests.length > 0) {
+            var merged = [];
+            interests.forEach(element => {
+                merged.push([id, element]);
+            });
 
-        let queryInsert = "INSERT INTO interests (user_id, interest) VALUES %L";
-        const resultInsert = submitData(format(queryInsert, interests), []);
-
-        return result;
+            let queryInsert = format("INSERT INTO interests (user_id, interest) VALUES %L", merged);
+            const resultInsert = submitData(queryInsert, []);
+        }
     },
 
 

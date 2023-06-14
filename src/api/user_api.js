@@ -177,26 +177,33 @@ export const userApi = {
             {
                 "username": 1,
                 "email": "...",
-                "photo": "/{username}_profile"
+                "photo": "/{username}_profile",
+                "interests": ["Interest1", "Interest2", ...]
             }
 
              */
             log("Trying to update user to database: " + request.payload.username);
 
-            const event = await User_service.updateUser(request.params.id, request.payload);
+            let event = await User_service.updateUser(request.params.id, request.payload);
 
-            if(request.payload.interests){
-                const event = await User_service.updateInterest(request.params.id, request.payload.interests)
+            if (request.payload.interests) {
+                log("Interests: " + request.payload.interests)
+                await User_service.updateInterest(request.params.id, request.payload.interests)
+                const responseInterest = await User_service.getUserInterests(request.params.id);
+                event.interests = responseInterest;
             }
 
             if (event) {
                 return h.response(event).code(200);
             }
+
             return h.response().code(404);
 
         },
         tags: ["api"],
-        description: "Update a user",
+        description: "Update a user and its interests."
+        + "The interests can be changed by adding a array of interests with the tag interests."
+        + "The User can be changed without its interests by not adding it.",
         notes: "Returns new user",
         validate: {
             params: Joi.object({
