@@ -102,7 +102,14 @@ export const User_service = {
         // this function deletes a user from the database
         let query = "DELETE FROM USERS WHERE username = $1";
         return submitData(query, [username]);
-    }
+    },
+
+    async updateUser(id, user) {
+        let query = "UPDATE users SET username = $1, email = $2, photo = $3 WHERE id = $4 RETURNING *";
+        const result = submitData(query, [user.username, user.email, user.photo, id]);
+
+        return result;
+    },
 
 
 
