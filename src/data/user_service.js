@@ -1,6 +1,8 @@
 
 import {getData, submitData} from '../data/db.js';
 import bcrypt from 'bcrypt';
+import format from 'pg-format';
+
 const saltRounds = 10;
 
 export const User_service = {
@@ -110,6 +112,20 @@ export const User_service = {
 
         return result;
     },
+
+    async updateInterest(id, interests) {
+
+        let queryDelete = "DELETE FROM interests WHERE user_id = $1";
+        const resultDelete = submitData(query, [id]);
+
+
+        let queryInsert = "INSERT INTO interests (user_id, interest) VALUES %L";
+        const resultInsert = submitData(format(queryInsert, interests), []);
+
+        return result;
+    },
+
+
 
 
 
