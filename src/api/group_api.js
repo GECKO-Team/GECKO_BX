@@ -29,5 +29,33 @@ export  const groupAPI = {
             schema: GetGroupSchema,
             failAction: validationError
         }
+    },
+
+    getAllGroups: {
+        auth: false,
+        handler: async function (request, h) {
+            let groups = await Group_service.getAllGroups();
+            groups = groups.rows;
+            return h.response(groups).code(200);
+        },
+        tags: ["api"],
+        description: "Get all groups",
+        notes: "Returns an array of groups",
+    },
+
+    getGroupbyID: {
+        auth: false,
+        handler: async function (request, h) {
+            let group = await Group_service.getGroupById(request.params.id);
+            group = group.rows[0];
+            if (group.rowCount === 0) {
+                return Boom.notFound("No group found with this ID");
+            }
+            return h.response(group).code(200);
+        },
+        tags: ["api"],
+        description: "Get a group by its ID",
+        notes: "Returns a group",
     }
+
 }

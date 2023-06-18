@@ -25,6 +25,8 @@ export const apiRoutes = [
 
     // Groups
     {method: "POST", path: "/api/createGroup", config: groupAPI.createGroup},
+    {method: "GET", path: "/api/groups/{id}", config: groupAPI.getGroupbyID},
+    {method: "GET", path: "/api/groups", config: groupAPI.getAllGroups},
 
     // Events
     {method: "POST", path: "/api/events", config: eventApi.createEvent},
