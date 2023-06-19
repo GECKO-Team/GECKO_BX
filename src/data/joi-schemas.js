@@ -41,7 +41,8 @@ export const createEventSchema = Joi.object({
     city: Joi.string().required(),
     street: Joi.string().required(),
     house_nr: Joi.string().required(),
-    description: Joi.string()
+    description: Joi.string(),
+    creator: Joi.string().required()
 });
 
 // Group
@@ -56,3 +57,19 @@ export const GetGroupSchema = Joi.object({
     description: Joi.string().required(),
     id: Joi.number().required()
 });
+
+export const GetAllGroups = // array of groups
+    Joi.array().items(
+        Joi.object({
+            name: Joi.string().required(),
+            description: Joi.string().required(),
+            id: Joi.number().required()
+        }
+        ));
+
+export const updateUserSchema = Joi.object({
+    username: Joi.string().required(),
+    email: Joi.string().required(),
+    photo: Joi.string().required(),
+    interests: Joi.array()
+})

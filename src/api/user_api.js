@@ -1,17 +1,17 @@
 // contains all the api calls related to user
 import Boom from "@hapi/boom";
-import {getData, submitData} from '../data/db.js';
-import {User_service} from "../data/user_service.js";
-import {CreateUserSchema, getUserSchema, checkUsernameSchema, userInformationSchema} from "../data/joi-schemas.js";
-import {log, validationError} from "./logger.js";
+import { getData, submitData } from '../data/db.js';
+import { User_service } from "../data/user_service.js";
+import { CreateUserSchema, getUserSchema, checkUsernameSchema, updateUserSchema, userInformationSchema } from "../data/joi-schemas.js";
+import { log, validationError } from "./logger.js";
 import Joi from "joi";
-import {createToken} from "./jwt_utils.js";
+import { createToken } from "./jwt_utils.js";
 
 const saltRounds = 10;
 
 
-export  const userApi = {
-    getAllUsers : {
+export const userApi = {
+    getAllUsers: {
         // returns a test message to assure the api is working
         handler: async function (request, h) {
             let query = "SELECT * FROM USERS";
@@ -23,7 +23,7 @@ export  const userApi = {
         notes: "Returns a simple String",
     },
 
-    createUser : {
+    createUser: {
         auth: false,
         handler: async function (request, h) {
             /*
@@ -59,21 +59,21 @@ export  const userApi = {
 
     },
 
-    checkUsername_exists : {
+    checkUsername_exists: {
         // returns false, when username exists, true when it does not
         auth: false,
-        handler: async function (request, h){
+        handler: async function (request, h) {
             if (await User_service.checkUsername_exists(request.payload.username)) {
                 //Boom.badRequest("Username already exists"); -> boom not testable with chai?
-                return h.response({success: false , error: "Username already exists"}).code(400);
+                return h.response({ success: false, error: "Username already exists" }).code(400);
             }
-            return h.response({success: true}).code(200);
+            return h.response({ success: true }).code(200);
         },
         tags: ["api"],
         description: "Check if username already exists",
         notes: "Returns true if the name exists, otherwise false",
         validate: {
-            payload: checkUsernameSchema ,
+            payload: checkUsernameSchema,
             failAction: validationError
         }
     },
@@ -100,7 +100,7 @@ export  const userApi = {
 
             } catch (err) {
                 // eslint-disable-next-line no-template-curly-in-string
-                console.log(`DEBUG: authenticate API - ${  err}`)
+                console.log(`DEBUG: authenticate API - ${err}`)
                 return Boom.serverUnavailable("Database Error");
             }
         },
@@ -112,7 +112,7 @@ export  const userApi = {
 
     },
 
-    getUser : {
+    getUser: {
         auth: false,
         handler: async function (request, h) {
 
@@ -131,12 +131,17 @@ export  const userApi = {
             console.dir(interests);
             console.dir(user);
 
-            return h.response({username: user.username, password: user.password, email: user.email, id: user.id, photo: user.photo, interest: interests}).code(200);
+            return h.response({ username: user.username, password: user.password, email: user.email, id: user.id, photo: user.photo, interest: interests }).code(200);
 
         },
         tags: ["api"],
         description: "Get a user by username",
         notes: "Returns a user details",
+        validate: {
+            params: Joi.object({
+                username: Joi.string()
+            })
+        },
         response: {
             schema: userInformationSchema,
             failAction: validationError
@@ -144,7 +149,7 @@ export  const userApi = {
 
     },
 
-    deleteUser : {
+    deleteUser: {
         auth: false,
         handler: async function (request, h) {
             console.log(request.params.username)
@@ -162,6 +167,52 @@ export  const userApi = {
         tags: ["api"],
         description: "Delete a user by username",
         notes: "Returns a user details",
+    },
+
+    updateUser: {
+        auth: false,
+        handler: async function (request, h) {
+            /*
+            INPUT SHOULD LOOK LIKE - validation not implemented yet // TODO
+            {
+                "username": 1,
+                "email": "...",
+                "photo": "/{username}_profile",
+                "interests": ["Interest1", "Interest2", ...]
+            }
+
+             */
+            log("Trying to update user to database: " + request.payload.username);
+
+            let event = await User_service.updateUser(request.params.id, request.payload);
+
+            if (request.payload.interests) {
+                log("Interests: " + request.payload.interests)
+                await User_service.updateInterest(request.params.id, request.payload.interests)
+                const responseInterest = await User_service.getUserInterests(request.params.id);
+                event.interests = responseInterest;
+            }
+
+            if (event) {
+                return h.response(event).code(200);
+            }
+
+            return h.response().code(404);
+
+        },
+        tags: ["api"],
+        description: "Update a user and its interests."
+        + "The interests can be changed by adding a array of interests with the tag interests."
+        + "The User can be changed without its interests by not adding it.",
+        notes: "Returns new user",
+        validate: {
+            params: Joi.object({
+                id: Joi.number()
+            }),
+            payload: updateUserSchema,
+            failAction: validationError
+        }
+
     },
 
 }

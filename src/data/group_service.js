@@ -17,6 +17,18 @@ export const Group_service = {
         const userid = await getData(query1, [username]);
         const group_admin = await submitData(query2, [created_group.id, userid.rows[0].id]);
         return group_admin;
+    },
+
+    async getAllGroups() {
+        let query = "SELECT * FROM GROUPS";
+        const groups = await getData(query);
+        return groups;
+    },
+
+    async getGroupById(id) {
+        let query = "SELECT * FROM GROUPS WHERE id = $1";
+        const group = await getData(query, [id]);
+        return group;
     }
 
 }

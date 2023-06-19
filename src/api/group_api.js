@@ -1,7 +1,7 @@
 import Boom from "@hapi/boom";
 import {submitData} from '../data/db.js';
 import {Group_service} from "../data/group_service.js";
-import {CreateGroupSchema, GetGroupSchema} from "../data/joi-schemas.js";
+import {CreateGroupSchema, GetAllGroups, GetGroupSchema} from "../data/joi-schemas.js";
 import {log, validationError} from "./logger.js";
 
 export  const groupAPI = {
@@ -29,5 +29,41 @@ export  const groupAPI = {
             schema: GetGroupSchema,
             failAction: validationError
         }
+    },
+
+    getAllGroups: {
+        auth: false,
+        handler: async function (request, h) {
+            let groups = await Group_service.getAllGroups();
+            groups = groups.rows;
+            return h.response(groups).code(200);
+        },
+        tags: ["api"],
+        description: "Get all groups",
+        notes: "Returns an array of groups",
+        response: {
+            schema: GetAllGroups,
+            failAction: validationError
+        }
+    },
+
+    getGroupbyID: {
+        auth: false,
+        handler: async function (request, h) {
+            let group = await Group_service.getGroupById(request.params.id);
+            group = group.rows[0];
+            if (group.rowCount === 0) {
+                return Boom.notFound("No group found with this ID");
+            }
+            return h.response(group).code(200);
+        },
+        tags: ["api"],
+        description: "Get a group by its ID",
+        notes: "Returns a group",
+        response: {
+            schema: GetGroupSchema,
+            failAction: validationError
+        }
     }
+
 }
