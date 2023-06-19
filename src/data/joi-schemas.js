@@ -58,6 +58,15 @@ export const GetGroupSchema = Joi.object({
     id: Joi.number().required()
 });
 
+export const GetAllGroups = // array of groups
+    Joi.array().items(
+        Joi.object({
+            name: Joi.string().required(),
+            description: Joi.string().required(),
+            id: Joi.number().required()
+        }
+        ));
+
 export const updateUserSchema = Joi.object({
     username: Joi.string().required(),
     email: Joi.string().required(),
