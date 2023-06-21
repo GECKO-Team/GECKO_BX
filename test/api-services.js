@@ -60,3 +60,87 @@ export const groupService = {
     },
 
 };
+
+export const eventService = {
+    Url: serviceUrl,
+
+    async createEvent(event) {
+        try {
+            const res = await axios.post(`${this.Url}/api/events`, event);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response;
+        }
+    },
+
+    async changeEvent(id, event) {
+        try {
+            const res = await axios.put(`${this.Url}/api/events/${id}`, event);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response;
+        }
+    },
+
+    async getEvent_by_Title(title) {
+        try {
+            console.log(title)
+            const res = await axios.get(`${this.Url}/api/events?title=${title}`);
+            console.log(res);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response;
+        }
+    },
+
+    async getEvent_by_Date(dateBefore, dateAfter) {
+        try {
+            const res = await axios.get(`${this.Url}/api/events?before=${dateBefore}&after=${dateAfter}`);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response;
+        }
+    },
+
+    async getEvent_by_Place(country, city, street, housenr) {
+        try {
+            const res = await axios.get(`${this.Url}/api/events?country=${country}&city=${city}&street=${street}&housenr=${housenr}`);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response;
+        }
+    },
+
+    async getEvent_by_Id(id) {
+        try {
+            const res = await axios.get(`${this.Url}/api/events/${id}`);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response;
+        }
+    },
+
+    async deleteEvent(id) {
+        try {
+            const res = await axios.delete(`${this.Url}/api/events/${id}`);
+            return res;
+        }
+        catch (err) {
+            console.log(err.response.data)
+            return err.response;
+        }
+
+    }
+};

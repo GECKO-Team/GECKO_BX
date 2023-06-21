@@ -87,7 +87,10 @@ export const eventApi = {
         // returns a test message to assure the api is working
         handler: async function (request, h) {
             const data = await event_service.deleteEvent(request.params.id);
-            return h.response().code(200);
+            if (data) {
+                return h.response().code(200);
+            }
+            return h.response().code(404);
         },
         tags: ["api"],
         description: "Delete a event",
@@ -132,9 +135,9 @@ export const eventApi = {
                 data = await event_service.getEvent_between_time(request.query.after, request.query.before);
             }
             else if (request.query.country && request.query.city && request.query.street && request.query.housenr) {
-                data = await event_service.getEvent_at_place(country, city, street, house_nr);
+                data = await event_service.getEvent_at_place(request.query.country, request.query.city, request.query.street, request.query.housenr);
             }
-            else{
+            else {
                 data = await event_service.getEvent_all();
             }
 

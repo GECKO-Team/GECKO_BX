@@ -2,7 +2,7 @@
 export const serviceUrl = "http://localhost:3000";
 
 export const test_user = {
-    username: "DEL_tester",
+    username: "DEL_tester2",
     email: "test@st.oth-regensbugr.de",
     password: "test"
 }
@@ -23,10 +23,12 @@ export const test_event = {
     city: "Straubing",
     street: "Teststraße",
     house_nr: "2",
-    description: "Teessajdflds"
+    description: "Teessajdflds",
+    creator: "test@st.oth-regensburg.de"
 }
 
 export const not_exist_event = {
+    id: -1,
     group_id: 99,
     title: "NotTest",
     time: "2222-12-17 07:37:16.000",
@@ -34,7 +36,8 @@ export const not_exist_event = {
     city: "Testistan",
     street: "Street",
     house_nr: "ABC",
-    description: "ABDDDF"
+    description: "ABDDDF",
+    creator: "test@st.oth-regensburg.de"
 }
 
 export const test_group = {
